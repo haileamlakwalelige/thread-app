@@ -8,7 +8,7 @@ require("dotenv").config();
 const app = express();
 const port = 3000;
 const cors = require("cors");
-app.use(cors()); // Corrected line
+app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -87,7 +87,7 @@ const sendVerificationEmail = async (email, verificationToken) => {
   try {
     await transport.sendMail(mailOption);
   } catch (error) {
-    console.log("Error sending emial", error);
+    console.log("Error sending email", error);
   }
 };
 
@@ -96,7 +96,7 @@ app.get("/verify/:token", async (req, res) => {
     const token = req.params.token;
 
     const user = await User.findOne({ verificationToken: token });
-    if (user) {
+    if (!user) {
       return res.status(404).json({ message: "Invalid Token" });
     }
     user.verified = true;
@@ -109,5 +109,33 @@ app.get("/verify/:token", async (req, res) => {
   } catch (err) {
     console.log("Error getting token", err);
     res.status(500).json({ message: "Email Verification Failed" });
+  }
+});
+
+
+const generateSecreteKey = () => {
+  const secretKey = crypto.randomBytes(32).toString("hex");
+  return secretKey;
+};
+
+const secretKey = generateSecreteKey();
+
+app.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "Invalid Email" });
+    }
+
+    if (user.password !== password) {
+      return res.status(404).json({ message: "Invalid Password" });
+    }
+
+    const token = jwt.sign({ userId: user._id }, secretKey);
+
+    res.status(200).json({ token });
+  } catch (error) {
+    res.status(500).json({ message: "Login Failed" });
   }
 });
