@@ -21,13 +21,13 @@ export default function LoginScreen() {
     <SafeAreaView className="w-screen flex flex-col justify-center items-center">
       <View className="w-screen justify-center items-center pt-10 pb-1">
         <Image
-          source={require("../assets/logo.jpg")}
+          source={require("../assets/logo.png")}
           className="w-[100px] h-[120px]"
         />
       </View>
       <KeyboardAvoidingView>
         <View className="justify-center items-center">
-          <Text className="font-extrabold text-base">
+          <Text className="font-extrabold text-base pb-6 pt-2">
             Login to your Account
           </Text>
         </View>
