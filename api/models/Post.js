@@ -26,8 +26,8 @@ const postSchema = new mongoose.Schema({
         required: true,
       },
       CreatedAt: {
-        type: Data,
-        default: Data.now,
+        type: Date,
+        default: Date.now,
       },
     },
   ],
@@ -37,6 +37,6 @@ const postSchema = new mongoose.Schema({
   },
 });
 
-const Post = mongoose.models("Post", postSchema);
+const Post = mongoose.model("Post", postSchema);
 
 module.exports = Post;
