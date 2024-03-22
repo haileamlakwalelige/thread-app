@@ -5,29 +5,50 @@ import {
   KeyboardAvoidingView,
   TextInput,
   Pressable,
+  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/core";
+import axios from "axios";
 
 export default function RegisterScreen() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
+
+  const handleRegister = () => {
+    const user = {
+      name: name,
+      email: email,
+      password: password, 
+    };
+
+    axios.post("https://localhost:3000/register",user).then((response)=>{
+      console.log(response);
+      Alert.alert("Registration successful", "you have been registered successfully");
+      setName("");
+      setEmail("");
+      setPassword("");
+    }).catch((error)=>{
+      Alert.alert("Registration failed", "An error occurred during registration");
+      console.log("Error", error);
+    })
+  };
   return (
     <SafeAreaView className="w-screen flex flex-col justify-center items-center">
       <View className="w-screen justify-center items-center pt-10 pb-1">
         <Image
-          source={require("../assets/logo.jpg")}
+          source={require("../assets/logo.png")}
           className="w-[100px] h-[120px]"
         />
       </View>
       <KeyboardAvoidingView>
         <View className="justify-center items-center">
-          <Text className="font-extrabold text-base">
+          <Text className="font-extrabold text-base pb-6 pt-2">
             Sign up to Your Account
           </Text>
         </View>
@@ -62,7 +83,7 @@ export default function RegisterScreen() {
         >
           <AntDesign name="lock" size={24} color="gray" />
           <TextInput
-          secureTextEntry={true}
+            secureTextEntry={true}
             value={password}
             onChangeText={(pass) => setPassword(pass)}
             placeholder="Enter your Password"
@@ -70,11 +91,13 @@ export default function RegisterScreen() {
           />
         </View>
 
-
         <View style={{ marginTop: 45 }} />
 
         <View className="flex  flex-col justify-center items-center">
-          <Pressable className="w-[150px] bg-black active:bg-gray-800 text-center h-[50px] rounded-xl flex justify-center items-center">
+          <Pressable
+            onPress={handleRegister}
+            className="w-[150px] bg-black active:bg-gray-800 text-center h-[50px] rounded-xl flex justify-center items-center"
+          >
             <Text className="text-white font-bold text-center text-base active:text-[#007fff]">
               Sign Up
             </Text>
