@@ -33,8 +33,8 @@ export default function RegisterScreen() {
       setName("");
       setEmail("");
       setPassword("");
-    }).catch((error)=>{
-      Alert.alert("Registration failed", "An error occurred during registration");
+    }).catch((error) => {
+      Alert.alert("Registration failed", "An error occurred during registration: " + error.message);
       console.log("Error", error);
     })
   };

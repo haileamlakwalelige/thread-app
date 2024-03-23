@@ -31,7 +31,7 @@ app.listen(port, () => {
 });
 
 const User = require("./models/User");
-const Post = require("./models/Post");
+// const Post = require("./models/Post");
 
 // Endpoint to register the user
 
@@ -81,7 +81,7 @@ const sendVerificationEmail = async (email, verificationToken) => {
     from: "thread.com",
     to: email,
     subject: "Email Verification",
-    text: `Please click the following lnk to verify you email https://localhost:3000/verify/${verificationToken}`,
+    text: `Please click the following lnk to verify your email https://localhost:3000/verify/${verificationToken}`,
   };
 
   try {
@@ -113,12 +113,12 @@ app.get("/verify/:token", async (req, res) => {
 });
 
 
-const generateSecreteKey = () => {
+const generateSecretKey = () => {
   const secretKey = crypto.randomBytes(32).toString("hex");
   return secretKey;
 };
 
-const secretKey = generateSecreteKey();
+const secretKey = generateSecretKey();
 
 app.post("/login", async (req, res) => {
   try {
